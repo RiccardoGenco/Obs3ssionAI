@@ -1,0 +1,22 @@
+
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+registro.txt
+prenotazioni.txt
+cose/gi
+# File di build o distribuzione
+dist/
+build/
+*.spec
+
+# Config VS Code
+.vscode/
+
+# Dati locali o sensibili
+.env
+*.sqlite

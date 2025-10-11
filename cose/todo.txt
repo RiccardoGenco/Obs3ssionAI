@@ -1,0 +1,54 @@
+TODO LIST PROTOTIPO AI AGENT RISTORAZIONE (prenotazioni + gestione base)
+
+1. Definisci obiettivo MVP
+- Fai un breve schema con le funzionalità minime:
+  • ricevere prenotazioni via messaggio (WhatsApp o Telegram)
+  • AI agent che interpreta la richiesta e risponde
+  • salvataggio dati prenotazioni su Google Sheets
+  • consultazione prenotazioni da parte del personale (Google Sheets o app semplice)
+
+2. Setup ambienti base
+
+2.1 Crea Google Sheet per prenotazioni
+- Crea Google Sheet con colonne: Nome, Data, Ora, Numero persone
+- Crea Google Cloud project e service account per Google Sheets API
+- Scarica e configura file credentials.json per accesso API
+
+2.2 Configura canale messaggi
+- Apri account Telegram (gratis, facile da usare) o usa Twilio WhatsApp (ha costi)
+- Crea bot Telegram via BotFather (gratis) o configura sandbox Twilio WhatsApp
+
+3. Sviluppo backend minimale (Python)
+- Crea ambiente virtuale Python e installa librerie (flask, python-dotenv, google-api-python-client, requests)
+- Implementa endpoint webhook per ricevere messaggi da Telegram/Twilio
+- Scrivi funzione base per rispondere con messaggio automatico (es. "Grazie, prenotazione ricevuta")
+- Implementa scrittura dati su Google Sheets (nome, data, ora...)
+
+4. Integrazione AI
+- Scegli modello AI:
+  • prova API GPT gratuita o DeepSeek (versione trial o free tier)
+  • inizia con prompt semplice per estrarre dati da testo (nome, data, ora)
+- Integra chiamate API nel backend per generare risposte AI dinamiche
+
+5. Test & validazione
+- Testa conversazioni reali con il bot (prenotazioni simulate)
+- Verifica che i dati vengano salvati correttamente su Google Sheets
+- Valuta risposta AI, migliora prompt se serve
+
+6. Setup ambiente test accessibile al personale
+- Condividi Google Sheet con lo staff
+- Eventuale creazione di interfaccia web/mobile molto base per consultare dati (opzionale)
+
+7. Ottimizzazione minima
+- Automatizza notifiche interne (es. mail o messaggi per nuove prenotazioni)
+- Gestione semplice magazzino (Google Sheet separato con aggiornamenti manuali)
+
+8. Documentazione & istruzioni
+- Prepara un piccolo manuale per il personale (come usare bot e fogli)
+- Documenta struttura progetto per sviluppi futuri
+
+Extra: Risorse gratuite consigliate
+- Google Sheets API (gratuito con limiti generosi)
+- Telegram Bot (gratis)
+- OpenAI GPT o DeepSeek con free tier/trial
+- Python + Flask (gratis e open source)
