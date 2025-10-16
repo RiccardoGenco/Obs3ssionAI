@@ -9,6 +9,7 @@ __pycache__/
 registro.txt
 prenotazioni.txt
 cose/gi
+get-pip.py
 # File di build o distribuzione
 dist/
 build/

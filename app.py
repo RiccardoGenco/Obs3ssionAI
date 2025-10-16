@@ -4,9 +4,9 @@ from agent_core import chiedi_all_agente, esegui_azione
 
 app = Flask(__name__)
 
-def salva_prenotazione(messaggio_utente, risposta_agente):
+def salva_log(messaggio_utente, risposta_agente):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open("prenotazioni.txt", "a", encoding="utf-8") as file:
+    with open("registro.txt", "a", encoding="utf-8") as file:
         file.write(f"[{timestamp}] Utente: {messaggio_utente} | Agente: {risposta_agente}\n")
 
 @app.route("/")
@@ -19,7 +19,7 @@ def chat():
     risposta_json = chiedi_all_agente(messaggio)
     risposta_testuale = esegui_azione(risposta_json)
 
-    salva_prenotazione(messaggio, risposta_json)
+    salva_log(messaggio, risposta_json)
 
     return jsonify({"risposta": risposta_testuale})
 

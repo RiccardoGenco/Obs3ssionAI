@@ -36,17 +36,6 @@ def sposta_cartella(percorso_origine, percorso_destinazione):
     except Exception as e:
         return f"Errore nello spostamento: {e}"
 
-def scrivi_registro_chat(nome_file, registro_chat):
-    """
-    Scrive tutto il registro della chat nel file 'registro.txt'.
-    registro_chat deve essere una stringa (es. concatenazione di tutti i messaggi).
-    """
-    try:
-        with open(nome_file, "w", encoding="utf-8") as f:
-            f.write(registro_chat)
-        return f"Registro chat salvato in '{nome_file}'."
-    except Exception as e:
-        return f"Errore durante la scrittura del registro chat: {e}"
 
 def crea_cartella(nome_cartella):
     print(f"DEBUG: Creo cartella in: {nome_cartella}")  # Vedi quale percorso arriva

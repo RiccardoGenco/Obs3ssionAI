@@ -106,9 +106,13 @@ def consulta_tabella(nome_tabella, colonne="*", condizione=None):
         query = f"SELECT {colonne} FROM {nome_tabella}"
         if condizione:
             query += f" WHERE {condizione}"
-        return esegui_query(query)
+        result = esegui_query(query)
+        # Garantiamo sempre una lista anche se nulla viene trovato
+        if result["success"] and result["data"] is None:
+            result["data"] = []
+        return result
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        return {"success": False, "error": str(e), "data": []}
 
 def elenca_tabelle():
     """Restituisce la lista delle tabelle nel database"""
