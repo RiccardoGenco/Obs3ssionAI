@@ -12,6 +12,7 @@ def inizializza_db():
     conn.close()
     return f"Database inizializzato in {DB_PATH}"
 
+
 def esegui_query(query, parametri=None):
     """Esegue una query SQL e restituisce i risultati"""
     try:
@@ -46,6 +47,7 @@ def crea_tabella(nome_tabella, definizione_colonne):
     Crea una nuova tabella nel database
     :param nome_tabella: Nome della tabella da creare
     :param definizione_colonne: Lista di definizioni delle colonne (es. ["id INTEGER PRIMARY KEY", "nome TEXT"])
+    
     """
     try:
         query = f"CREATE TABLE IF NOT EXISTS {nome_tabella} ({', '.join(definizione_colonne)})"
@@ -55,17 +57,58 @@ def crea_tabella(nome_tabella, definizione_colonne):
 
 def inserisci_dati(nome_tabella, dati):
     """
-    Inserisce dati in una tabella
+    Inserisce uno o più record in una tabella.
+    Se la tabella non ha un campo ID, è consigliato usare:
+    "id INTEGER PRIMARY KEY AUTOINCREMENT" come prima colonna.
+    
     :param nome_tabella: Nome della tabella
-    :param dati: Dizionario con i dati da inserire {colonna: valore}
+    :param dati: Dizionario singolo {colonna: valore} o lista di dizionari
     """
     try:
-        colonne = list(dati.keys())
-        valori = list(dati.values())
-        placeholders = ','.join(['?' for _ in valori])
-        
-        query = f"INSERT INTO {nome_tabella} ({','.join(colonne)}) VALUES ({placeholders})"
-        return esegui_query(query, valori)
+        # Caso: lista di record
+        if isinstance(dati, list):
+            if not dati:
+                return {"success": False, "error": "Lista vuota"}
+            
+            colonne = list(dati[0].keys())
+            valori = [tuple(item.get(col) for col in colonne) for item in dati]
+            placeholders = ','.join(['?' for _ in colonne])
+            query = f"INSERT INTO {nome_tabella} ({','.join(colonne)}) VALUES ({placeholders})"
+            
+            with sqlite3.connect(DB_PATH) as conn:
+                cursor = conn.cursor()
+                cursor.executemany(query, valori)
+                conn.commit()
+            
+            return {"success": True, "affected_rows": len(valori)}
+
+        # Caso: singolo record
+        elif isinstance(dati, dict):
+            colonne = list(dati.keys())
+            valori = list(dati.values())
+            placeholders = ','.join(['?' for _ in valori])
+            query = f"INSERT INTO {nome_tabella} ({','.join(colonne)}) VALUES ({placeholders})"
+            return esegui_query(query, valori)
+
+        # Caso: formato non valido
+        else:
+            return {"success": False, "error": "Formato dei dati non valido"}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+def elimina_tabella(nome_tabella):
+    """
+    Elimina completamente una tabella dal database.
+    :param nome_tabella: Nome della tabella da eliminare
+    """
+    try:
+        query = f"DROP TABLE IF EXISTS {nome_tabella}"
+        risultato = esegui_query(query)
+        if risultato["success"]:
+            return {"success": True, "message": f"Tabella '{nome_tabella}' eliminata con successo."}
+        else:
+            return risultato
     except Exception as e:
         return {"success": False, "error": str(e)}
 
